@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script src="https://cdn.jsdelivr.net/npm/faker@5.5.3/dist/faker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700;900&display=swap"
+            rel="stylesheet">
+
+        <title>Data Generator</title>
+        <link rel="stylesheet" href="styles/styles.css">
+        <script type="module" src="scripts/app.js" defer></script>
+    </head>
+
+<body>
+    <main>
+        <div class="header">
+            <div class="data-generator">
+                <h1>Data Generator</h1>
+            </div>
+            <h1 class="choose-columns">Choose the columns</h1>
+            <div id="options">
+                <div class="options">
+                    <label class="container">
+                        <input type="checkbox" id="name" name="field" value="Name">
+                        <svg viewBox="0 0 64 64" height="1rem" width="1rem">
+                            <path
+                                d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                pathLength="575.0541381835938" class="path"></path>
+                        </svg>
+                    </label>
+                    <label for="name">Name</label>
+                </div>
+                <div class="options">
+                    <label class="container">
+                        <input type="checkbox" id="age" name="field" value="Age">
+                        <svg viewBox="0 0 64 64" height="1rem" width="1rem">
+                            <path
+                                d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                pathLength="575.0541381835938" class="path"></path>
+                        </svg>
+                    </label>
+                    <label for="age">Age</label>
+                </div>
+                <div class="options">
+                    <label class="container">
+                        <input type="checkbox" id="email" name="field" value="Email">
+                        <svg viewBox="0 0 64 64" height="1rem" width="1rem">
+                            <path
+                                d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                pathLength="575.0541381835938" class="path"></path>
+                        </svg>
+                    </label>
+                    <label for="email">Email</label>
+                </div>
+                <div class="options">
+                    <label class="container">
+                        <input type="checkbox" id="nationality" name="field" value="Nationality">
+                        <svg viewBox="0 0 64 64" height="1rem" width="1rem">
+                            <path
+                                d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                pathLength="575.0541381835938" class="path"></path>
+                        </svg>
+                    </label>
+                    <label for="nationality">Nationality</label>
+                </div>
+
+                <div class="options">
+                    <label class="container">
+                        <input type="checkbox" id="jobTitle" name="field" value="JobTitle">
+                        <svg viewBox="0 0 64 64" height="1rem" width="1rem">
+                            <path
+                                d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                pathLength="575.0541381835938" class="path"></path>
+                        </svg>
+                    </label>
+                    <label for="jobTitle">Job Title</label>
+                </div>
+            </div>
+            <!-- Add this element to display the generated data -->
+            <h1 class="file-type-h1">Choose the file type</h1>
+            <div id="formatSelection">
+                <div class="file">
+                    <label for="csv">CSV</label>
+                    <label class="container">
+                        <input type="checkbox" id="csv" name="format" value="csv">
+                        <div class="checkmark"></div>
+                    </label>
+                </div>
+
+                <div class="file">
+                    <label for="xml">XML</label>
+                    <label class="container">
+                        <input type="checkbox" id="xml" name="format" value="xml">
+                        <div class="checkmark"></div>
+                    </label>
+                </div>
+
+                <div class="file">
+                    <label for="json">JSON</label>
+                    <label class="container">
+                        <input type="checkbox" id="json" name="format" value="json">
+                        <div class="checkmark"></div>
+                    </label>
+                </div>
+
+                <div class="file">
+                    <label for="html">HTML</label>
+                    <label class="container">
+                        <input type="checkbox" id="html" name="format" value="html">
+                        <div class="checkmark"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="generate-reset">
+                <button id="generateData" class="button">Generate Data</button>
+                <button id="resetData" class="button">Reset Data</button>
+            </div>
+            <a id="downloadLink" style="display: none" download="generated_data.csv">Download Data</a>
+        </div>
+
+        <div class="datas">
+            <div id="output">
+                <div id="refreshButtonContainer"> <!-- Wrap the refresh button in a container -->
+                    <button class="refresh-button" id="refreshButton">&#x21bb;</button>
+                </div>
+                <div id="dataOutput" class="data-output">
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+
+</html>
