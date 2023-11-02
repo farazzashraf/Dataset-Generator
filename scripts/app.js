@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = generateData(selectedFields); // Replace with your data generation logic
         const selectedFormat = getSelectedFormat();
 
+        // Show the file type heading in the output
+        const fileTypeHeading = document.getElementById('fileTypeHeading');
+        fileTypeHeading.textContent = `${selectedFormat.toUpperCase()}`;
+        fileTypeHeading.style.display = 'block';
+
         let formattedData;
         if (selectedFormat === 'csv') {
             formattedData = convertToCSV(data);
@@ -99,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         downloadLink.style.display = 'none';
         refreshButton.style.display = 'none';
         dataOutput.style.display = 'none';
+        fileTypeHeading.style.display = 'none';
     }
 
 
