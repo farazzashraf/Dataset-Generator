@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const refreshButton = document.querySelector('.refresh-button');
     const formatCheckboxes = document.getElementsByName('format');
     const fieldCheckboxes = document.getElementsByName('field');
+    const notification = document.getElementById("notification");
+    const dataAmountContainer = document.getElementById("dataAmountContainer");
+
 
     // Function to handle checkbox behavior
     function handleCheckboxChange(checkbox) {
@@ -18,6 +21,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
+
+        const atLeastOneColumnSelected = Array.from(fieldCheckboxes).some((checkbox) => checkbox.checked);
+        const atLeastOneFileTypeSelected = Array.from(formatCheckboxes).some((checkbox) => checkbox.checked);
+
+        if (atLeastOneColumnSelected && atLeastOneFileTypeSelected) {
+            // Show the "Data Amount" input field
+            dataAmountContainer.style.display = 'block';
+        } else {
+            // Hide the "Data Amount" input field
+            dataAmountContainer.style.display = 'none';
+        }
     }
 
     // Add change event listener to each format checkbox
@@ -27,9 +41,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    fieldCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            handleCheckboxChange(checkbox);
+        });
+    });
+
+    function isDataGenerationValid() {
+        const atLeastOneColumnSelected = Array.from(fieldCheckboxes).some((checkbox) => checkbox.checked);
+        const atLeastOneFileTypeSelected = Array.from(formatCheckboxes).some((checkbox) => checkbox.checked);
+
+        return atLeastOneColumnSelected && atLeastOneFileTypeSelected;
+    }
+
     generateDataButton.addEventListener('click', function () {
+        const columnsSelected = document.querySelectorAll('input[name="field"]:checked').length > 0;
         const selectedFields = getSelectedFields();
-        const data = generateData(selectedFields); // Replace with your data generation logic
+        const dataAmount = parseInt(document.getElementById('dataAmount').value); // Get the user-specified data amount
+        const data = generateData(selectedFields, dataAmount); // Replace with your data generation logic
         const selectedFormat = getSelectedFormat();
 
         // Show the file type heading in the output
@@ -72,20 +101,33 @@ document.addEventListener('DOMContentLoaded', function () {
         fieldCheckboxes.forEach((checkbox) => {
             checkbox.checked = false;
         });
+
+        document.getElementById('dataAmount').value = '';
     });
 
     refreshButton.addEventListener('click', function () {
         const selectedFields = getSelectedFields();
-        const data = generateData(selectedFields);
+        const dataAmount = parseInt(document.getElementById('dataAmount').value); // Get the user-specified data amount
+        const data = generateData(selectedFields, dataAmount); // Regenerate the data
         const selectedFormat = getSelectedFormat();
+
+        // Show the file type heading in the output
+        const fileTypeHeading = document.getElementById('fileTypeHeading');
+        fileTypeHeading.textContent = `${selectedFormat.toUpperCase()}`;
+        fileTypeHeading.style.display = 'block';
 
         let formattedData;
         if (selectedFormat === 'csv') {
             formattedData = convertToCSV(data);
-        } else {
+        } else if (selectedFormat === 'xml') {
             formattedData = convertToXML(data);
+        } else if (selectedFormat === 'json') {
+            formattedData = convertToJSON(data);
+        } else if (selectedFormat === 'html') {
+            formattedData = convertToHTML(data);
         }
 
+        // Display the regenerated data on the web page
         dataOutput.textContent = formattedData;
         refreshButton.style.display = 'inline-block';
     });
@@ -121,25 +163,32 @@ document.addEventListener('DOMContentLoaded', function () {
         return selectedFormat.value;
     }
 
-    function generateData(selectedFields) {
+    function generateData(selectedFields, dataAmount) {
         // Replace this with your dataset generation logic
         // Example: Generating a simple dataset
-        const data = [];
-        for (let i = 0; i < 2000; i++) {
-            const name = faker.name.findName(); // Generate a random name
-            const age = Math.floor(Math.random() * 50 + 18); // Random age between 18 and 67
-            const email = faker.internet.email();
-            const nationality = faker.address.country(); // Generate a random nationality
-            const jobTitle = faker.name.jobTitle();
+        if (!areColumnsAndFileTypeSelected() || !isDataAmountSpecified()) {
+            showNotification('Please choose columns, file type, and specify the data amount before generating data.');
+        } else {
+            hideNotification();
+            output.style.display = 'block';
+            const data = [];
+            for (let i = 0; i < dataAmount; i++) {
+                const name = faker.name.findName(); // Generate a random name
+                const age = Math.floor(Math.random() * 50 + 18); // Random age between 18 and 67
+                const email = faker.internet.email();
+                const nationality = faker.address.country(); // Generate a random nationality
+                const jobTitle = faker.name.jobTitle();
 
-            data.push([name, age, email, nationality, jobTitle]);
+                data.push([name, age, email, nationality, jobTitle]);
+            }
+
+            const filteredData = data.map(row => selectedFields.map(field => {
+                return field === 'Name' ? row[0] : field === 'Age' ? row[1] : field === 'Email' ? row[2] :
+                    field === 'Nationality' ? row[3] : row[4]
+            }));
+            return [selectedFields, ...filteredData];
         }
 
-        const filteredData = data.map(row => selectedFields.map(field => {
-            return field === 'Name' ? row[0] : field === 'Age' ? row[1] : field === 'Email' ? row[2] :
-                field === 'Nationality' ? row[3] : row[4]
-        }));
-        return [selectedFields, ...filteredData];
     }
 
     function convertToCSV(data) {
@@ -202,4 +251,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return htmlDocument;
     }
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const dataAmountInput = document.getElementById('dataAmount');
+    const output = document.getElementById('output');
+
+    function areColumnsAndFileTypeSelected() {
+        const columnsSelected = Array.from(checkboxes).filter(checkbox => checkbox.name === 'field' && checkbox.checked).length > 0;
+        const fileTypeSelected = Array.from(checkboxes).filter(checkbox => checkbox.name === 'format' && checkbox.checked).length > 0;
+        return columnsSelected && fileTypeSelected;
+    }
+
+    function isDataAmountSpecified() {
+        return dataAmountInput.value.trim() !== '';
+    }
+
+    function showNotification(message) {
+        notification.textContent = message;
+        notification.style.display = 'block';
+    }
+
+    function hideNotification() {
+        notification.style.display = 'none';
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            hideNotification();
+        });
+    });
+
 });
+
+
+
+
