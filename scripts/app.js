@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const filteredData = data.map(row => selectedFields.map(field => {
                 return field === 'Name' ? row[0] : field === 'Age' ? row[1] : field === 'Email' ? row[2] :
-                    field === 'Nationality' ? row[3] : row[4]
+                    field === 'Nationality' ? row[3] : row[4];
             }));
             return [selectedFields, ...filteredData];
         }
